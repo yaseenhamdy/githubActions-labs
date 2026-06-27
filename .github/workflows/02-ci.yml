@@ -62,3 +62,10 @@ jobs:
 
       - name: Validate Python Version
         run: echo python --version
+
+
+      - name: Linting test
+        run: |
+          sudo snap install ruff   
+          pip install ruff    
+          ruff check ./app/app.py
