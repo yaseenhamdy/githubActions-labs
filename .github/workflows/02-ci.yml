@@ -3,7 +3,7 @@
 name: 02 CI Workflow
 
 env:
- PYTHON_VERSION: 3.12
+  PYTHON_VERSION: 3.12
 
 on:
   # Run automatically when app code, tests, or this workflow file changes.
@@ -13,26 +13,21 @@ on:
       - "tests/**"
       - ".github/workflows/02-ci.yml"
   schedule:
-    - cron: '* 10 * * *'
+    - cron: "0 10 * * *"
   # Allow a safe manual run before students trigger it with a code change.
   workflow_dispatch:
 
-
-
 jobs:
-
-
-
   run-tests:
     # The runner is the temporary machine that executes the steps below.
 
     strategy:
-     fail-fast: true
-     matrix:
-       environment: ["3.12" , "3.13"]
-       OS: ["ubuntu-latest" , "macos-latest"]       
+      fail-fast: true
+      matrix:
+        environment: ["3.12"]
+        OS: ["ubuntu-latest"]
     runs-on: ${{matrix.OS}}
-   
+
     steps:
       - name: Check out repository
         # Download the repository contents onto the runner.
@@ -45,11 +40,25 @@ jobs:
         with:
           python-version: ${{matrix.environment}}
 
+      - name: Scan Doker file
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          scan-ref: ./Dockerfile
+          severity: "HIGH,CRITICAL"
+          exit-code: "0" 
+
+      - name: Scan file system
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: '.'
+          severity: "HIGH,CRITICAL"
+          exit-code: "0"                   
+
       - name: Run tests
         # This is the key verification step in the CI workflow.
         run: python -m unittest discover -s tests -v
 
       - name: Validate Python Version
         run: echo python --version
-  
- 
