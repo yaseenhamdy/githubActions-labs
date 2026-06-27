@@ -25,13 +25,13 @@ jobs:
 
   run-tests:
     # The runner is the temporary machine that executes the steps below.
-    
+
     strategy:
      fail-fast: true
      matrix:
        environment: ["3.12" , "3.13"]
        OS: ["ubuntu-latest" , "macos-latest"]       
-    runs-on: ${{OS.environment}}
+    runs-on: ${{matrix.OS}}
    
     steps:
       - name: Check out repository
