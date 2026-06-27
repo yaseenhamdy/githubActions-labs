@@ -9,6 +9,9 @@ on:
       - "app/**"
       - "tests/**"
       - ".github/workflows/02-ci.yml"
+  schedule:
+    - cron: '* 10 * * *'
+      timezone: "America/New_York"    
   # Allow a safe manual run before students trigger it with a code change.
   workflow_dispatch:
 
@@ -21,6 +24,7 @@ jobs:
       - name: Check out repository
         # Download the repository contents onto the runner.
         uses: actions/checkout@v6
+
 
       - name: Set up Python
         # Prepare Python on the runner. This does not change the student laptop.
