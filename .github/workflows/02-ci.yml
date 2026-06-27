@@ -17,14 +17,22 @@ on:
   # Allow a safe manual run before students trigger it with a code change.
   workflow_dispatch:
 
+
+
 jobs:
+
+
+
   run-tests:
     # The runner is the temporary machine that executes the steps below.
-    runs-on: ubuntu-latest
+    
     strategy:
-      fail-fast: true
-      matrix:
-        environment: ["3.12" , "3.13"]
+     fail-fast: true
+     matrix:
+       environment: ["3.12" , "3.13"]
+       OS: ["ubuntu-latest" , "macos-latest"]       
+    runs-on: ${{OS.environment}}
+   
     steps:
       - name: Check out repository
         # Download the repository contents onto the runner.
@@ -40,3 +48,8 @@ jobs:
       - name: Run tests
         # This is the key verification step in the CI workflow.
         run: python -m unittest discover -s tests -v
+
+      - name: Validate Python Version
+        run: echo python --version
+  
+ 
