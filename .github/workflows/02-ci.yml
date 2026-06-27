@@ -31,7 +31,7 @@ jobs:
         # Prepare Python on the runner. This does not change the student laptop.
         uses: actions/setup-python@v6
         with:
-          python-version: ${{env.PYTHON_VERSION}}
+          python-version: ${{secrets.PYTHON_VERSION_SECRET}}
 
       - name: Run tests
         # This is the key verification step in the CI workflow.
