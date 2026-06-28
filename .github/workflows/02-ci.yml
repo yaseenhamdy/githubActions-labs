@@ -65,3 +65,27 @@ jobs:
           sudo snap install ruff   
           pip install ruff    
           ruff check ./app/app.py
+
+
+      - name: Build Docker Image
+        run: |
+          docker build -t my-app:${{ github.sha }} .
+
+      - name: Save Docker Image
+        run: |
+          docker save -o my-app.tar my-app:${{ github.sha }}
+
+      - name: Upload Docker Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: my-app.tar
+
+      - name: Scan Docker Image Archive
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: my-app.tar
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "0"
+          ignore-unfixed: true
