@@ -68,6 +68,15 @@ jobs:
             -p "${APP_PORT}:8000" \
             "${{ steps.image-metadata.outputs.image_reference }}"
 
+
+      - name: Linst Running Cintainers
+        run: |
+          docker ps 
+
+      - name: Echo }/health"
+        run: |
+          curl http://127.0.0.1:${APP_PORT}/health
+
       - name: Smoke test deployed app
         # Retry a few times because app startup can take a moment.
         run: |
