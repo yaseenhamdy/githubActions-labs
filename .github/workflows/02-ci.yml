@@ -80,6 +80,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{env.AWS_REGION}}
       
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Push Image to ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -88,7 +92,7 @@ jobs:
         run: |
           docker tag python-app:v1 $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          
+
       - name: Save Docker Image
         run: |
           docker save -o my-app.tar python-app:v1
