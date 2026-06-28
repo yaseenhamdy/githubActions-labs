@@ -69,11 +69,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t pythonapp:v1 .
+          docker build -t my-app:${{ github.sha }} .
 
       - name: Save Docker Image
         run: |
-          docker save -o my-app.tar pythonapp:v1
+          docker save -o my-app.tar my-app:${{ github.sha }}
 
       - name: Upload Docker Image Artifact
         uses: actions/upload-artifact@v4
@@ -88,3 +88,4 @@ jobs:
           format: table
           severity: HIGH,CRITICAL
           exit-code: "0"
+          ignore-unfixed: true
